@@ -5,6 +5,9 @@ import (
 	"os"
 
 	"github.com/chishkin-afk/learning_notes/internal/infrastructure/config"
+	"github.com/chishkin-afk/learning_notes/internal/infrastructure/persistence/postgres"
+	logger "github.com/chishkin-afk/learning_notes/pkg/log"
+	"github.com/jmoiron/sqlx"
 )
 
 // DIContainer manages dependencies
@@ -14,7 +17,9 @@ import (
 type DIContainer struct {
 	cfg *config.Config
 
-	// ...logger
+	log *slog.Logger
+
+	db *sqlx.DB
 
 	// ...server
 
@@ -39,4 +44,28 @@ func (di *DIContainer) Config() *config.Config {
 	}
 
 	return di.cfg
+}
+
+func (di *DIContainer) DB() *sqlx.DB {
+	if di.db == nil {
+		db, err := postgres.Connect(di.Config())
+		if err != nil {
+			slog.Error("failed to connect db",
+				slog.String("error", err.Error()),
+			)
+		}
+
+		di.db = db
+	}
+
+	return di.db
+}
+
+func (di *DIContainer) Log() *slog.Logger {
+	if di.log == nil {
+		logHandler := logger.NewHandler(di.Config().App.Env)
+		di.log = slog.New(logHandler)
+	}
+
+	return di.log
 }

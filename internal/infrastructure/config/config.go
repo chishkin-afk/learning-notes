@@ -55,7 +55,8 @@ type Server struct {
 }
 
 type Persistence struct {
-	Postgres struct {
+	MigrationsPath string `yaml:"migrations_path" validate:"required"`
+	Postgres       struct {
 		Host    string `yaml:"host" validate:"required,hostname"`
 		Port    int    `yaml:"port" validate:"required,gte=1,lte=65535"`
 		SSLMode string `yaml:"sslmode" validate:"required,oneof=disable enable"`

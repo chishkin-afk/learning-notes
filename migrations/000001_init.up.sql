@@ -1,0 +1,9 @@
+CREATE TABLE IF NOT EXISTS notes (
+    id UUID PRIMARY KEY,
+    title VARCHAR(128) NOT NULL,
+    description VARCHAR(512),
+    status_int INTEGER NOT NULL DEFAULT 0,
+    priority_int INTEGER NOT NULL DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

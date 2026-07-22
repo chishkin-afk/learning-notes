@@ -161,6 +161,7 @@ server:
     idle_timeout: 1s
 
 persistence:
+  migrations_path: ./migrations
   postgres:
     host: localhost
     port: 5432
