@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/chishkin-afk/learning_notes/internal/infrastructure/config"
+	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
 )
 

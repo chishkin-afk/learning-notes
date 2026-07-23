@@ -79,6 +79,42 @@ func New(
 	}, nil
 }
 
+// Restore is a unsafe constructor for Note
+//
+// It creates a Note object for any values—even
+// invalid ones—and returns an error for Warn-level logging.
+func Restore(
+	id uuid.UUID,
+	title string,
+	description string,
+	status Status,
+	priority Priority,
+	createdAt time.Time,
+	updatedAt time.Time,
+) (*Note, error) {
+	var errs []error
+
+	title = strings.TrimSpace(title)
+	if err := validateTitle(title); err != nil {
+		errs = append(errs, err)
+	}
+
+	description = strings.TrimSpace(description)
+	if err := validateDescription(description); err != nil {
+		errs = append(errs, err)
+	}
+
+	return &Note{
+		id:          id,
+		title:       title,
+		description: description,
+		status:      status,
+		priority:    priority,
+		createdAt:   createdAt,
+		updatedAt:   updatedAt,
+	}, errors.Join(errs...)
+}
+
 // Done changes status to StatusDone
 func (n *Note) Done() error {
 	if !n.status.EqualsStatus(StatusPending) {
